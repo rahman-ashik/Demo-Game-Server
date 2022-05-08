@@ -29,7 +29,7 @@ public class Connect4 {
                 display(grid);
                 System.out.println("Current State: " + stateManager.getState());
                 System.out.print("Player " + player + ", choose a column: ");
-                play = in.nextInt();
+                play = in.nextInt() - 1;
 
                 // validate play
                 validPlay = validate(play, grid);
