@@ -1,10 +1,13 @@
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.management.GarbageCollectorMXBean;
 import java.net.Socket;
 import java.util.Scanner;
 
 public class PlayerClient {
+
+    private int[][] board = new int[5][9];
     private static String playerName;
 
     public static void main(String[] args) throws IOException {
@@ -13,12 +16,11 @@ public class PlayerClient {
 
         System.out.println("Client started.");
 
-        try (Socket socket = new Socket(HOST, PORT);
+        try (
+                Socket socket = new Socket(HOST, PORT);
                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
                 Scanner in = new Scanner(socket.getInputStream());
-                Scanner s = new Scanner(System.in);)
-
-        {
+                Scanner s = new Scanner(System.in);) {
             System.out.println("Connected to server.");
 
             // setup player name
@@ -28,70 +30,59 @@ public class PlayerClient {
             playerName = name;
 
             // setup board
+            boolean ready = false;
+
+            while (!ready) {
+                System.out.println("To start the game, enter 'start'");
+                String input = s.nextLine();
+                if (input.equalsIgnoreCase("start")) {
+                    out.println("start");
+                    ready = true;
+                }
+            }
+
+            // start game
+            Connect4 game = new Connect4();
 
             // play game
-            while (true) {
+            while (!game.getWinner()) {
+                game.play(in, out);
+            
+
+
+                /*
                 System.out.print("Input: ");
                 String input = s.nextLine();
-                String response = in.nextLine();
-                // System.out.println(response);
-                handleIncomingStream(response, out, in, s);
 
-                if (input.equalsIgnoreCase("exit")) {
-                    out.println(input);
+                // input should be a number between 1 and 9
+                while (!(input.matches("[1-9]"))) {
+                    System.err.println("Invalid input. Please enter a number between 1 and 9.");
+                    System.out.print("Input: ");
+                    input = s.nextLine();
+                }
+
+                out.println(input);
+                if (input.equalsIgnoreCase("exit"))
                     break;
-                } else if (input.equalsIgnoreCase("help")) {
-                    System.out.println("Available commands: bla bla bla");
-                } else if (input.equalsIgnoreCase("board")
-                        || input.equalsIgnoreCase("GetState")
-                        || input.equalsIgnoreCase("GetAllPlayers")) {
-                    out.println(input);
-                } else {
-                    out.println("move:" + input);
+
+                String response = in.nextLine();
+                System.out.println("Gameserver Response: " + response);
+
+                if (response.startsWith("You Selected :")) {
+                    String GameStatus = response.substring(response.indexOf("Game Status :") + 14);
+                    System.out.println("Game Status: " + GameStatus);
+                    Game game = new Game();
+                    game.syncState(GameStatus);
+                    game.showBoard(GameStatus);
                 }
 
                 System.out.println("");
-                // showBoard(null); // pass the board array to show the board
+
+                // Game.printBoard();
+
+                */
             }
         }
     }
 
-    public static void showBoard(int[][] board) {
-        System.out.println("┌ 1 ┬ 2 ┬ 3 ┬ 4 ┬ 5 ┬ 6 ┬ 7 ┬ 8 ┬ 9 ┐");
-        System.out.println("│   │   │   │   │   │   │   │   │   │");
-        System.out.println("├-─-┼-─-┼-─-┼-─-┼-─-┼-─-┼-─-┼-─-┼-─-┤");
-        System.out.println("│   │   │   │   │   │   │   │   │   │");
-        System.out.println("├-─-┼-─-┼-─-┼-─-┼-─-┼-─-┼-─-┼-─-┼-─-┤");
-        System.out.println("│   │   │   │   │   │   │   │   │   │");
-        System.out.println("├-─-┼-─-┼-─-┼-─-┼-─-┼-─-┼-─-┼-─-┼-─-┤");
-        System.out.println("│   │ X │ X │   │   │   │   │   │   │");
-        System.out.println("├-─-┼-─-┼-─-┼-─-┼-─-┼-─-┼-─-┼-─-┼-─-┤");
-        System.out.println("│ O │ O │ X │   │   │   │   │   │   │");
-        System.out.println("└-─-┴-─-┴-─-┴-─-┴-─-┴-─-┴-─-┴-─-┴-─-┘");
-    }
-
-    public static void handleIncomingStream(String input, PrintWriter out, Scanner in, Scanner s) {
-        if (input.equalsIgnoreCase("exit")) {
-            System.out.println("Exiting...");
-            System.exit(0);
-        } else if (input.startsWith("board")) {
-            showBoard(null);
-        } else if (input.startsWith("state")) {
-            showState(input.substring(input.indexOf(":") + 1));
-        } else if (input.startsWith("move")) {
-            askNextMove(in, out);
-        } else {
-            System.out.println("Incoming Stream: " + input);
-        }
-    }
-
-    public static void showState(String state) {
-        System.out.println("I got State: " + state);
-    }
-
-    public static void askNextMove(Scanner in, PrintWriter out) {
-        System.out.println("Enter your next move (1-9) : ");
-        String input = in.nextLine();
-        out.println(input);
-    }
 }

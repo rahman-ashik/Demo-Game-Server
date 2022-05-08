@@ -1,27 +1,55 @@
 public class StateManager {
-    String state;
-
-    StateManager(String state) {
-        this.state = state;
-    }
+    char[][] grid;
 
     StateManager() {
-        this.state = "000000000000000000200000000000100000000000000";
+        char[][] grid = new char[6][7];
+        for (int row = 0; row < grid.length; row++) {
+            for (int col = 0; col < grid[0].length; col++) {
+                grid[row][col] = ' ';
+            }
+        }
     }
 
     public String getState() {
+        String state = "";
+        for (int row = 0; row < grid.length; row++) {
+            for (int col = 0; col < grid[0].length; col++) {
+                state += grid[row][col];
+            }
+        }
         return state;
     }
 
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public void appendState(String state) {
-        this.state += state;
+    public void setState(char[][] grid2) {
+        grid = grid2;
     }
 
     public void resetState() {
-        this.state = "000000000000000000000000000000000000000000000";
+        grid = new char[6][7];
+        for (int row = 0; row < grid.length; row++) {
+            for (int col = 0; col < grid[0].length; col++) {
+                grid[row][col] = ' ';
+            }
+        }
     }
+
+    public char[][] getBoard() {
+        return grid;
+    }
+
+    public void updateBoard(String boardString) {
+        int index = 0;
+        for (int row = 0; row < grid.length; row++) {
+            for (int col = 0; col < grid[0].length; col++) {
+                grid[row][col] = boardString.charAt(index);
+                index++;
+            }
+        }
+
+    }
+
+    public void updateState(char[][] grid2) {
+        setState(grid2);
+    }
+
 }
