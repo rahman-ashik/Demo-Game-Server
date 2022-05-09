@@ -2,13 +2,29 @@ import java.io.PrintWriter;
 import java.util.Scanner;
 
 public class Connect4 {
+    char[][] grid = new char[6][7];
+    StateManager stateManager = new StateManager();
+    // Reset
+    public static final String RESET = "\033[0m"; // Text Reset
+
+    // Bold
+    public static final String RED_BOLD = "\033[1;31m"; // RED
+    public static final String BLUE_BOLD = "\033[1;34m"; // BLUE
+
+    // Background
+    public static final String WHITE_BACKGROUND = "\033[47m"; // WHITE
+
+    // Bold High Intensity
+    public static final String RED_BOLD_BRIGHT = "\033[1;91m"; // RED
+    public static final String BLUE_BOLD_BRIGHT = "\033[1;94m"; // BLUE
+
+    // High Intensity backgrounds
+    public static final String WHITE_BACKGROUND_BRIGHT = "\033[0;107m"; // WHITE
+
     boolean winner = false;
 
     public void play(Scanner response, PrintWriter out) {
         Scanner in = new Scanner(System.in);
-
-        char[][] grid = new char[6][7];
-        StateManager stateManager = new StateManager();
         stateManager.resetState();
 
         // initialize array
@@ -28,14 +44,33 @@ public class Connect4 {
             do {
                 display(grid);
                 System.out.println("Current State: " + stateManager.getState());
-                System.out.print("Player " + player + ", choose a column: ");
-                play = in.nextInt() - 1;
+
+                String state = stateManager.getState();
+                out.println(state);
+                out.flush();
+
+
+                // if it's Red's turn then client will play
+                if (turn % 2 == 1) {
+                    System.out.println("It's Red's turn.");
+                    System.out.println("Enter a column number: ");
+                    play = in.nextInt()-1;
+                } else {
+                    // if it's Blue's turn then server will play
+                    System.out.println("It's Blue's turn.");
+                    play = response.nextInt();
+                }
+
+
+
+
+                // System.out.print("Player " + player + ", choose a column: ");
+                // play = in.nextInt() - 1;
 
                 // validate play
                 validPlay = validate(play, grid);
                 // update state
                 stateManager.updateState(grid);
-                out.println(stateManager.getState());
             } while (validPlay == false);
 
             // drop the checker
@@ -72,7 +107,21 @@ public class Connect4 {
 
     }
 
+    Connect4() {
+        // initialize array
+        for (int row = 0; row < grid.length; row++) {
+            for (int col = 0; col < grid[0].length; col++) {
+                grid[row][col] = ' ';
+            }
+        }
+        stateManager.resetState();
+    }
+
     public static void main(String[] args) {
+
+        System.out.println(RED_BOLD + "Connect 4" + RESET);
+        System.out.println(BLUE_BOLD + "Connect 4" + RESET);
+
         char[][] grid = new char[6][7];
 
         for (int row = 0; row < grid.length; row++) {
@@ -81,21 +130,34 @@ public class Connect4 {
             }
         }
 
-        display(grid);
+        // put random R and B in grid
+        grid[0][0] = 'R';
+        grid[2][1] = 'B';
+        grid[0][2] = 'R';
+        grid[4][3] = 'B';
+
+        // display(grid);
     }
 
     public boolean getWinner() {
         return winner;
     }
 
-    public static void display(char[][] grid) {
+    public void display(char[][] grid) {
         // System.out.println(" 0 1 2 3 4 5 6");
         // System.out.println(" - - - - - - - - - - - - - - -");
         System.out.println("┌ 1 ┬ 2 ┬ 3 ┬ 4 ┬ 5 ┬ 6 ┐");
         for (int row = 0; row < grid.length; row++) {
             System.out.print("| ");
             for (int col = 0; col < grid[0].length; col++) {
-                System.out.print(grid[row][col]);
+
+                if (grid[row][col] == 'R') {
+                    System.out.print(RED_BOLD + 'x' + RESET);
+                } else if (grid[row][col] == 'B') {
+                    System.out.print(BLUE_BOLD + 'O' + RESET);
+                } else {
+                    System.out.print(grid[row][col]);
+                }
                 if (!(col == grid[0].length - 1)) {
                     System.out.print(" | ");
                 }
@@ -173,5 +235,21 @@ public class Connect4 {
             }
         }
         return false;
+    }
+
+    public void setState(String input) {
+        // convert string to state
+        stateManager.setState(input);
+
+    }
+
+    public void setState(char[][] grid) {
+        // convert string to state
+        stateManager.setState(grid);
+
+    }
+
+    public char[][] getGrid() {
+        return grid;
     }
 }

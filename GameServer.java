@@ -23,6 +23,7 @@ public class GameServer {
                     try (
                             PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
                             Scanner in = new Scanner(clientSocket.getInputStream());) {
+
                         while (in.hasNextLine()) {
                             String input = in.nextLine();
                             if (input.equalsIgnoreCase("exit")) {
@@ -38,6 +39,12 @@ public class GameServer {
                                 continue;
                             }
                             System.out.println("Received input from client: " + input);
+
+                            // send a random number between 1 and 6
+                            Random r = new Random();
+                            int computerSelection = r.nextInt(6) + 1;
+                            System.out.println("Computer selected: " + computerSelection);
+                            out.println(computerSelection);
 
                             /*
                              * 

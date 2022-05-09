@@ -52,4 +52,14 @@ public class StateManager {
         setState(grid2);
     }
 
+    public void setState(String input) {
+        int index = 0;
+        for (int row = 0; row < grid.length; row++) {
+            for (int col = 0; col < grid[0].length; col++) {
+                grid[row][col] = input.charAt(index);
+                index++;
+            }
+        }
+    }
+
 }
