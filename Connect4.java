@@ -53,16 +53,7 @@ public class Connect4 {
                 if (turn % 2 == 1) {
                     System.out.println("It's Red's turn.");
                     System.out.println("Enter a column number: ");
-                    // get input from client as string
-                    String input = in.nextLine();
-                    // check if input is a number
-                    try {
-                        play = Integer.parseInt(input);
-                    } catch (NumberFormatException e) {
-                        System.out.println("Invalid input. Please enter a number.");
-                    }
-                    // convert string to int
-                    // play = Integer.parseInt(input);
+                    // get input from client and check if it's valid
                     play = in.nextInt() - 1;
                 } else {
                     // if it's Blue's turn then server will play

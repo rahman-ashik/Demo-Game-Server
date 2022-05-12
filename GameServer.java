@@ -6,6 +6,7 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class GameServer {
+    
     public static void main(String[] args) throws IOException {
         final int PORT = 4040;
         ServerSocket serverSocket = new ServerSocket(PORT);
