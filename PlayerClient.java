@@ -61,6 +61,9 @@ public class PlayerClient {
             out.println("exit");
             socket.close();
             Connect4.showOutro();
+        } catch (IOException e) {
+            System.out.println("IOException: " + e.getMessage());
+            System.err.println("Server is not running / responding. Connection failed.");
         }
 
     }
