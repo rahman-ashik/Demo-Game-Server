@@ -49,20 +49,26 @@ public class Connect4 {
                 out.println(state);
                 out.flush();
 
-
                 // if it's Red's turn then client will play
                 if (turn % 2 == 1) {
                     System.out.println("It's Red's turn.");
                     System.out.println("Enter a column number: ");
-                    play = in.nextInt()-1;
+                    // get input from client as string
+                    String input = in.nextLine();
+                    // check if input is a number
+                    try {
+                        play = Integer.parseInt(input);
+                    } catch (NumberFormatException e) {
+                        System.out.println("Invalid input. Please enter a number.");
+                    }
+                    // convert string to int
+                    // play = Integer.parseInt(input);
+                    play = in.nextInt() - 1;
                 } else {
                     // if it's Blue's turn then server will play
                     System.out.println("It's Blue's turn.");
                     play = response.nextInt();
                 }
-
-
-
 
                 // System.out.print("Player " + player + ", choose a column: ");
                 // play = in.nextInt() - 1;
@@ -252,4 +258,22 @@ public class Connect4 {
     public char[][] getGrid() {
         return grid;
     }
+
+    public static void showIntro() {
+        System.out.print("\033[1;32m      ,-----.                                      ,--.     ,---. \033[0m\n");
+        System.out.print("\033[1;32m     '  .--.| ,---. ,--,--, ,--,--,  ,---.  ,---.,-'  '-.  /    | \033[0m\n");
+        System.out.print("\033[1;32m     |  |    | .-. ||      ||      |'  .-.:| .--''-.  .-' /  '  | \033[0m\n");
+        System.out.print("\033[1;32m     '  '-- |  '-' '|  ||  ||  ||  ||'  --.|'`--.  |  |   '--|  | \033[0m\n");
+        System.out.print("\033[1;32m      `-----' `---' `--''--'`--''--' `----' `----'  `--'     `--' \033[0m\n");
+    }
+
+    public static void showOutro() {
+        System.out.print("\033[1;31m   _______                          _______                   			\033[0m\n");
+        System.out.print("\033[1;31m  |     __|.---.-.--------.-----.  |       |.--.--.-----.----.			\033[0m\n");
+        System.out.print("\033[1;31m  |    |  ||  _  |        |  -__|  |   -   ||  |  |  -__|   _|			\033[0m\n");
+        System.out.print("\033[1;31m  |_______||___._|__|__|__|_____|  |_______|  ___/|_____|__|  			\033[0m\n");
+        System.out
+                .print("\033[1;31m   `------'  `--`--'`-`-`-' `----'   `-----'   `--' `----'`--'  		    \033[0m\n");
+    }
+
 }

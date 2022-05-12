@@ -9,6 +9,9 @@ public class PlayerClient {
 
     private int[][] board = new int[5][9];
     private static String playerName;
+    public static final String BLUE_BOLD_BRIGHT = "\033[1;94m"; // BLUE
+    public static final String RED_BOLD_BRIGHT = "\033[1;91m"; // RED
+    public static final String RESET = "\033[0m"; // Text Reset
 
     public static void main(String[] args) throws IOException {
         final String HOST = "127.0.0.1";
@@ -38,51 +41,28 @@ public class PlayerClient {
                 if (input.equalsIgnoreCase("start")) {
                     out.println("start");
                     ready = true;
+
                 }
             }
 
+            Connect4.showIntro();
+            System.out.println("Game started. " + RED_BOLD_BRIGHT + "You are Red set to 'X' " + BLUE_BOLD_BRIGHT
+                    + "and the computer is Blue set to 'O'." + RESET);
             // start game
             Connect4 game = new Connect4();
 
             // play game
             while (!game.getWinner()) {
                 game.play(in, out);
-            
-
-
-                /*
-                System.out.print("Input: ");
-                String input = s.nextLine();
-
-                // input should be a number between 1 and 9
-                while (!(input.matches("[1-9]"))) {
-                    System.err.println("Invalid input. Please enter a number between 1 and 9.");
-                    System.out.print("Input: ");
-                    input = s.nextLine();
-                }
-
-                out.println(input);
-                if (input.equalsIgnoreCase("exit"))
-                    break;
-
-                String response = in.nextLine();
-                System.out.println("Gameserver Response: " + response);
-
-                if (response.startsWith("You Selected :")) {
-                    String GameStatus = response.substring(response.indexOf("Game Status :") + 14);
-                    System.out.println("Game Status: " + GameStatus);
-                    Game game = new Game();
-                    game.syncState(GameStatus);
-                    game.showBoard(GameStatus);
-                }
-
-                System.out.println("");
-
-                // Game.printBoard();
-
-                */
             }
+
+            // close socket
+            System.out.println("Game Ended");
+            out.println("exit");
+            socket.close();
+            Connect4.showOutro();
         }
+
     }
 
 }

@@ -11,7 +11,7 @@ public class GameServer {
         ServerSocket serverSocket = new ServerSocket(PORT);
 
         System.out.println("Game Server started ...");
-        System.out.println("Wating for Players ...");
+        System.out.println("Waiting for Players ...");
 
         while (true) {
             Socket clientSocket = serverSocket.accept();
@@ -19,11 +19,13 @@ public class GameServer {
 
                 String name;
 
+                StateManager stateManager = new StateManager();
+
                 public void run() {
                     try (
                             PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
                             Scanner in = new Scanner(clientSocket.getInputStream());) {
-
+                        stateManager.resetState();
                         while (in.hasNextLine()) {
                             String input = in.nextLine();
                             if (input.equalsIgnoreCase("exit")) {
@@ -39,44 +41,17 @@ public class GameServer {
                                 continue;
                             }
                             System.out.println("Received input from client: " + input);
-
+                            stateManager.setState(input);
+                            // System.out.println("Board updated to: " + stateManager.getState());
                             // send a random number between 1 and 6
                             Random r = new Random();
-                            int computerSelection = r.nextInt(6) + 1;
+                            int computerSelection = r.nextInt(5) + 1;
                             System.out.println("Computer selected: " + computerSelection);
                             out.println(computerSelection);
-
-                            /*
-                             * 
-                             * int playerSelection = Integer.valueOf(input);
-                             * // use playerSelection to make a move
-                             * 
-                             * // game.makeMove(playerSelection);
-                             * 
-                             * int computerSelection = new Random().nextInt(8) + 1;
-                             * 
-                             * String oldState = stateManager.getState();
-                             * String newState = oldState.substring(0, playerSelection - 1) + "X"
-                             * + oldState.substring(playerSelection);
-                             * // newState = newState.substring(0, computerSelection - 1) + "O"
-                             * // + newState.substring(computerSelection);
-                             * stateManager.setState(newState);
-                             * 
-                             * // make move
-                             * game.makeMove(playerSelection, "X");
-                             * // game.makeMove(computerSelection, "O");
-                             * 
-                             * out.println("You Selected : " + playerSelection + " " +
-                             * "Computer Selected : "
-                             * + computerSelection + " Game Status : " + stateManager.getState());
-                             * 
-                             * System.out.println("");
-                             * game.syncState(stateManager.getState());
-                             * game.showBoard(stateManager.getState());
-                             */
                         }
                     } catch (IOException e) {
                     }
+                    System.out.println(name + " has disconnected.");
                 }
             };
             t.start();
