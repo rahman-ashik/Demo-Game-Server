@@ -5,12 +5,19 @@ Group Members
 
 To run :  
 	compile frist from the terminal : 
+	
 		javac Connect4.java
+		
 		javac GameServer.java
+		
 		javac PlayerClient.java
+		
 		javac StateManager.java
+		
 	then run the program :
+	
 		java GameServer
+		
 		java PlayerClient
 
 
