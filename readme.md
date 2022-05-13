@@ -4,7 +4,7 @@ Group Members
 - Asif Talukder #23520477
 
 To run :  
-	compile frist from the terminal : 
+	compile first from the terminal : 
 	
 		javac Connect4.java
 		
@@ -14,7 +14,7 @@ To run :
 		
 		javac StateManager.java
 		
-	then run the program :
+	then run the program from the terminal :
 	
 		java GameServer
 		
